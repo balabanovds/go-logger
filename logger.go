@@ -154,14 +154,13 @@ func (l *logger) okCtx(ctx context.Context) bool {
 	}
 }
 
-func (l *logger) withFields(kvs ...zap.Field) []zap.Field {
-	args := make([]zap.Field, 0, len(l.fields)+len(kvs)+len(l.tmpFields))
+func (l *logger) withFields(fields ...zap.Field) []zap.Field {
+	l.Lock()
+	defer l.Unlock()
+	args := make([]zap.Field, 0, len(l.fields)+len(fields)+len(l.tmpFields))
 	args = append(args, l.fields...)
 	args = append(args, l.tmpFields...)
-
-	if len(kvs)%2 == 0 {
-		args = append(args, kvs...)
-	}
+	args = append(args, fields...)
 	return args
 }
 
