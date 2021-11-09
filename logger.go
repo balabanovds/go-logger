@@ -105,7 +105,9 @@ func (l *logger) ClearFields() {
 }
 
 func (l *logger) Close() error {
-	return l.l.Sync()
+	// since we use stderr - no need to sync
+	//return l.l.Sync()
+	return nil
 }
 
 func (l *logger) Error(ctx context.Context, err error, fields ...zap.Field) {
