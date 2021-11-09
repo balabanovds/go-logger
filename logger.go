@@ -2,9 +2,10 @@ package go_logger
 
 import (
 	"context"
-	"go.uber.org/zap"
 	"io"
 	"sync"
+
+	"go.uber.org/zap"
 )
 
 type Logger interface {
@@ -16,6 +17,7 @@ type Logger interface {
 	Globalize()
 	AddFields(fields ...zap.Field)
 	ClearFields()
+	ZapLogger() *zap.Logger
 	io.Closer
 }
 
@@ -79,6 +81,10 @@ func setLevel(level string, cfg *zap.Config) error {
 
 	cfg.Level.SetLevel(al.Level())
 	return nil
+}
+
+func (l *logger) ZapLogger() *zap.Logger {
+	return l.l
 }
 
 func (l *logger) Globalize() {
